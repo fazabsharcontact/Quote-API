@@ -10,6 +10,12 @@ app.get("/quotes", (req, res) => {
     res.json(quotes);
 })
 
+app.get("/quotes/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    const findQuote = quotes.find((quote) => quote.id === id);
+    res.json(findQuote);
+})
+
 app.listen(port, () => {
     console.log("Server running on port 3000...");
 })
