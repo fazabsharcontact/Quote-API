@@ -4,16 +4,55 @@ import bodyParser from "body-parser";
 const app = express();
 const port = 3000;
 
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/quotes", (req, res) => {
     res.json(quotes);
-})
+});
 
 app.get("/quotes/:id", (req, res) => {
     const id = parseInt(req.params.id);
     const findQuote = quotes.find((quote) => quote.id === id);
     res.json(findQuote);
+});
+
+app.post("/quotes", (req, res) => {
+    const newQuote = {
+        id: quotes.length + 1,
+        text: req.body.text,
+    };
+
+    quotes.push(newQuote);
+    console.log(quotes.slice(-1));
+    res.json(newQuote);
+});
+
+app.put("/quotes/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    const editQuote = {
+        id: id,
+        text: req.body.text,
+    };
+
+    const findIndex = quotes.findIndex((quote) => quote.id === id);
+    quotes[findIndex] = editQuote;
+    console.log(quotes.slice(-1));
+    res.json(editQuote);
+});
+
+app.patch("/quotes/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    const exitingQuote = quotes.find((quote) => quote.id === id);
+    const editQuote = {
+        id: id,
+        text: req.body.text || exitingQuote.text,
+    };
+
+    const findIndex = quotes.findIndex((quotes) => quote.id === id);
+    quotes[findIndex] = editQuote;
+    console.log(quotes[findIndex]);
+    res.json(editQuote);
 })
 
 app.listen(port, () => {
