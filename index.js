@@ -53,11 +53,22 @@ app.patch("/quotes/:id", (req, res) => {
     quotes[findIndex] = editQuote;
     console.log(quotes[findIndex]);
     res.json(editQuote);
-})
+});
+
+app.delete("/quotes/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const findIndex = quotes.findIndex((quote) => quote.id === id);
+  if (findIndex > -1) {
+    quotes.splice(findIndex, 1);
+    res.status(200).json({ message: "Quote deleted complete."});
+  } else {
+    res.status(404).json({ error: `Quote with id ${id} not found.`});
+  }
+});
 
 app.listen(port, () => {
     console.log("Server running on port 3000...");
-})
+});
 
 var quotes = [
     {
